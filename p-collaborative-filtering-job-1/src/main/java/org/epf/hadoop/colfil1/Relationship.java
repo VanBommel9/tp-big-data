@@ -1,30 +1,54 @@
 package org.epf.hadoop.colfil1;
 
-public class Relationship {
-    private String user1;
-    private String user2;
-    private double weight;
+import org.apache.hadoop.io.Writable;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
-    public Relationship(String user1, String user2, double weight) {
-        this.user1 = user1;
-        this.user2 = user2;
-        this.weight = weight;
+public class Relationship implements Writable {
+    private String id1;
+    private String id2;
+
+    public Relationship() {
+        this.id1 = "";
+        this.id2 = "";
     }
 
-    public String getUser1() {
-        return user1;
+    public Relationship(String id1, String id2) {
+        this.id1 = id1;
+        this.id2 = id2;
     }
 
-    public String getUser2() {
-        return user2;
+    public String getId1() {
+        return id1;
     }
 
-    public double getWeight() {
-        return weight;
+    public void setId1(String id1) {
+        this.id1 = id1;
+    }
+
+    public String getId2() {
+        return id2;
+    }
+
+    public void setId2(String id2) {
+        this.id2 = id2;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeUTF(id1);
+        out.writeUTF(id2);
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        id1 = in.readUTF();
+        id2 = in.readUTF();
     }
 
     @Override
     public String toString() {
-        return user1 + "\t" + user2 + "\t" + weight;
+        return id1 + "<->" + id2;
     }
 }
