@@ -1,4 +1,4 @@
-Projet : Pipeline de Filtrage Collaboratif Distribué avec Hadoop
+# Projet : Pipeline de Filtrage Collaboratif Distribué avec Hadoop
 Ce projet met en œuvre un pipeline de filtrage collaboratif distribué, construit à l’aide de Hadoop. Il repose sur trois jobs MapReduce successifs qui analysent un fichier de relations utilisateur et génèrent des recommandations basées sur des connexions partagées.
 
 Prérequis
