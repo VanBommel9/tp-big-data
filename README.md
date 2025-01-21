@@ -1,26 +1,6 @@
 Projet : Pipeline de Filtrage Collaboratif Distribué avec Hadoop
 Ce projet met en œuvre un pipeline de filtrage collaboratif distribué, construit à l’aide de Hadoop. Il repose sur trois jobs MapReduce successifs qui analysent un fichier de relations utilisateur et génèrent des recommandations basées sur des connexions partagées.
 
-Structure du Projet
-bash
-Copier
-Modifier
-.
-├── data/                           # Dossier contenant les données d'entrée
-│   └── relationships/data.txt      # Fichier listant les relations utilisateur
-├── deploy/                         # Fichiers nécessaires pour configurer Docker et Hadoop
-│   ├── Dockerfile                  # Configuration du conteneur Hadoop
-│   ├── core-site.xml               # Fichier de configuration HDFS
-│   ├── entrypoint.sh               # Script de démarrage du conteneur
-│   └── ...                         # Autres fichiers de configuration
-├── jars/                           # Emplacement des JARs compilés
-│   ├── hadoop-tp3-collaborativeFiltering-job1-1.0.jar
-│   ├── hadoop-tp3-collaborativeFiltering-job2-1.0.jar
-│   └── hadoop-tp3-collaborativeFiltering-job3-1.0.jar
-├── p-collaborative-filtering-job-1 # Code source pour le Job 1
-├── p-collaborative-filtering-job-2 # Code source pour le Job 2
-├── p-collaborative-filtering-job-3 # Code source pour le Job 3
-└── pom.xml                         # Fichier de configuration Maven
 Prérequis
 Pour exécuter ce projet, assurez-vous que les outils suivants sont installés sur votre machine :
 
@@ -31,17 +11,11 @@ Maven : utilisé pour la gestion des dépendances et la compilation.
 1. Cloner le Dépôt
 Récupérez les fichiers du projet avec la commande suivante :
 
-bash
-Copier
-Modifier
 git clone <votre-lien-du-repo>  
 cd hadoop-tp3  
 2. Compiler les Jobs Hadoop
 Compilez les trois projets Java MapReduce pour générer les fichiers JAR nécessaires :
 
-bash
-Copier
-Modifier
 # Compiler le Job 1  
 cd p-collaborative-filtering-job-1  
 mvn clean install  
@@ -62,18 +36,14 @@ Une fois compilés, copiez les fichiers JAR dans le dossier jars/.
 4. Construire l’Image Docker
 Placez-vous dans le dossier deploy/ et générez l’image Docker :
 
-bash
-Copier
-Modifier
+
 cd deploy  
 docker build -t hadoop-tp3-img .  
 cd ..  
 5. Démarrer le Conteneur Docker
 Lancez un conteneur en utilisant l’image créée :
 
-bash
-Copier
-Modifier
+
 docker run --rm -d \  
   -p 8088:8088 -p 9870:9870 -p 9864:9864 \  
   -v "$(pwd)/jars:/jars" \  
@@ -82,9 +52,7 @@ docker run --rm -d \
 6. Entrer dans le Conteneur
 Pour interagir avec Hadoop, accédez au conteneur en tant qu’utilisateur epfuser :
 
-bash
-Copier
-Modifier
+
 docker exec -it hadoop-tp3-cont su - epfuser  
 Étapes à Réaliser dans le Conteneur
 1. Créer les Répertoires HDFS
@@ -99,17 +67,11 @@ hdfs dfs -mkdir -p /jars
 2. Charger les Fichiers dans HDFS
 Transférez les fichiers d’entrée et les JARs dans HDFS :
 
-bash
-Copier
-Modifier
 hdfs dfs -put /data/relationships/data.txt /data/relationships/  
 hdfs dfs -put /jars/*.jar /jars  
 3. Lancer les Jobs Hadoop
 Exécutez les trois jobs MapReduce dans l’ordre suivant :
 
-bash
-Copier
-Modifier
 # Job 1  
 hadoop jar /jars/hadoop-tp3-collaborativeFiltering-job1-1.0.jar /data/relationships/data.txt /data/output/job1  
 
@@ -121,15 +83,11 @@ hadoop jar /jars/hadoop-tp3-collaborativeFiltering-job3-1.0.jar /data/output/job
 4. Télécharger les Résultats
 Récupérez le fichier de résultats sur votre machine locale :
 
-bash
-Copier
-Modifier
 hdfs dfs -get /data/output/job3/part-r-00000 /data/output/final_recommendations.txt  
 Résultat Attendu
 Le fichier final final_recommendations.txt contient les recommandations sous ce format :
 
-Copier
-Modifier
+
 alice   david:3  
 bob     eve:2, frank:2  
 charlie eve:3  
