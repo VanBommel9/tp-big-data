@@ -1,0 +1,6 @@
+alice	david:3
+bob	eve:2, frank:2
+charlie	eve:3
+david	alice:3, frank:2
+eve	charlie:3, bob:2
+frank	bob:2, david:2
